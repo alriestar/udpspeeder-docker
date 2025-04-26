@@ -36,6 +36,8 @@ jobs:
         context: .
         platforms: linux/amd64,linux/arm64
         push: true
+        provenance: false  # Nonaktifkan
+        sbom: false        # Nonaktifkan
         tags: |
           ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ env.TAG_CURRENT }}
           ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
