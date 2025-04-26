@@ -10,10 +10,11 @@ RUN cd /usr/bin \
     && apk add --no-cache wget ca-certificates \
     && wget -qO- ${URL} | tar xzv \
     && SUFFIX=$(case "$TARGETARCH" in \
-       amd64) echo "amd64" ;; \
-       arm64) echo "arm" ;; \
-       arm) echo "arm" ;; \
-       386) echo "x86" ;; \
+        amd64) echo "amd64" ;; \
+        arm64) echo "arm" ;; \
+        arm) echo "arm" ;; \
+        386) echo "x86" ;; \
+       esac) \
     && mv speederv2_$SUFFIX udp-speeder \
     && chmod +x udp-speeder \
     && rm -f speederv2_* \
