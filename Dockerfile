@@ -6,21 +6,20 @@ ARG VER=20230206.0
 ARG URL=https://github.com/wangyu-/UDPspeeder/releases/download/${VER}/speederv2_binaries.tar.gz
 ARG TARGETARCH
 
-
 RUN cd /usr/bin \
     && apk add --no-cache wget ca-certificates \
     && wget -qO- ${URL} | tar xzv \
     && SUFFIX=$(case "$TARGETARCH" in \
-    amd64) echo "amd64" ;; \
-    arm | arm64) echo "arm" ;; \
-    386) echo "x86" ;; \
-    *) echo "unknown" ;; esac) \
+       amd64) echo "amd64" ;; \
+       arm64) echo "arm64" ;; \
+       arm) echo "arm" ;; \
+       386) echo "x86" ;; \
+       *) echo "unknown" ;; esac) \
     && mv speederv2_$SUFFIX udp-speeder \
-    && udp-speeder -h \
+    && chmod +x udp-speeder \
     && rm -f speederv2_* \
     && apk del wget ca-certificates
 
 USER nonroot
-
 ENTRYPOINT ["/usr/bin/udp-speeder"]
 CMD ["-h"]
