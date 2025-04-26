@@ -11,7 +11,7 @@ RUN cd /usr/bin \
     && wget -qO- ${URL} | tar xzv \
     && SUFFIX=$(case "$TARGETARCH" in \
        amd64) echo "amd64" ;; \
-       arm64) echo "arm64" ;; \
+       arm64) echo "arm" ;; \
        arm) echo "arm" ;; \
        386) echo "x86" ;; \
        *) echo "unknown" ;; esac) \
