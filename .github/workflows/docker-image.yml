@@ -10,26 +10,32 @@ env:
 
 jobs:
   build:
-    name: Deploy to ghcr.io
+    name: Build and Push
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout master
-      uses: actions/checkout@v2
-    - name: Build
-      run: |
-        docker build \
-        --tag ghcr.io/${{github.repository_owner}}/${{env.IMAGE_NAME}}:${{env.TAG_CURRENT}} \
-        --tag ghcr.io/${{github.repository_owner}}/${{env.IMAGE_NAME}}:${{env.TAG_LATEST}} \
-        --tag ghcr.io/${{github.repository_owner}}/${{env.IMAGE_NAME}}:${{env.TAG_DEV}} \
-        .
-    - name: Push image to GitHub - master
-      if: ${{ github.ref_name == 'master' }}
-      run: |
-        echo "${{ secrets.GITHUB_TOKEN }}" | docker login -u "${{ github.actor }}" --password-stdin ghcr.io
-        docker push ghcr.io/${{github.repository_owner}}/${{env.IMAGE_NAME}}:${{env.TAG_CURRENT}}
-        docker push ghcr.io/${{github.repository_owner}}/${{env.IMAGE_NAME}}:${{env.TAG_LATEST}}
-    - name: Push image to GitHub - dev
-      if: ${{ startsWith(github.ref_name, 'dev-') }}
-      run: |
-        echo "${{ secrets.GITHUB_TOKEN }}" | docker login -u "${{ github.actor }}" --password-stdin ghcr.io
-        docker push ghcr.io/${{github.repository_owner}}/${{env.IMAGE_NAME}}:${{env.TAG_DEV}}
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Login to GHCR
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Build and Push
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: |
+          ghcr.io/${{ github.repository_owner }}/${{env.IMAGE_NAME}}:${{env.TAG_CURRENT}}
+          ghcr.io/${{ github.repository_owner }}/${{env.IMAGE_NAME}}:${{env.TAG_LATEST}}
+          ghcr.io/${{ github.repository_owner }}/${{env.IMAGE_NAME}}:${{env.TAG_DEV}}
