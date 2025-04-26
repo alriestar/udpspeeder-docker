@@ -12,7 +12,7 @@ RUN cd /usr/bin \
     && wget -qO- ${URL} | tar xzv \
     && SUFFIX=$(case "$TARGETARCH" in \
     amd64) echo "amd64" ;; \
-    arm) echo "arm" ;; \
+    arm | arm64) echo "arm" ;; \
     386) echo "x86" ;; \
     *) echo "unknown" ;; esac) \
     && mv speederv2_$SUFFIX udp-speeder \
