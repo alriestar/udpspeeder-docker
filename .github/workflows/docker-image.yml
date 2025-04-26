@@ -9,6 +9,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    permissions:  # Tambahkan blok permissions
+      contents: read
+      packages: write
+
     steps:
     - name: Generate Date Tag
       run: echo "TAG_CURRENT=$(date +'v%Y%m%d')" >> $GITHUB_ENV
@@ -35,4 +39,3 @@ jobs:
         tags: |
           ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ env.TAG_CURRENT }}
           ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
-          ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:dev
