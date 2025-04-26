@@ -1,32 +1,30 @@
-name: Build Docker
+name: Build and Push to GHCR
 on: [push, workflow_dispatch]
 
 env:
   IMAGE_NAME: udpspeeder
-  TAG_LATEST: latest
-  TAG_DEV: dev
+  REGISTRY: ghcr.io
+  USERNAME: alriestar  # Ganti dengan GitHub username Anda
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
     - name: Generate Date Tag
-      run: echo "TAG_CURRENT=v$(date +%Y%m%d)" >> $GITHUB_ENV
+      run: echo "TAG_CURRENT=$(date +'v%Y%m%d')" >> $GITHUB_ENV
 
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Setup QEMU
-      uses: docker/setup-qemu-action@v3
-
-    - name: Setup Buildx
+    - name: Setup Docker Buildx
       uses: docker/setup-buildx-action@v3
 
     - name: Login to GHCR
       uses: docker/login-action@v3
       with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
+        registry: ${{ env.REGISTRY }}
+        username: ${{ env.USERNAME }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build and Push
@@ -36,6 +34,6 @@ jobs:
         platforms: linux/amd64,linux/arm64
         push: true
         tags: |
-          ghcr.io/${{ github.repository_owner }}/${{env.IMAGE_NAME}}:${{env.TAG_CURRENT}}
-          ghcr.io/${{ github.repository_owner }}/${{env.IMAGE_NAME}}:${{env.TAG_LATEST}}
-          ghcr.io/${{ github.repository_owner }}/${{env.IMAGE_NAME}}:${{env.TAG_DEV}}
+          ${{ env.REGISTRY }}/${{ env.USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.TAG_CURRENT }}
+          ${{ env.REGISTRY }}/${{ env.USERNAME }}/${{ env.IMAGE_NAME }}:latest
+          ${{ env.REGISTRY }}/${{ env.USERNAME }}/${{ env.IMAGE_NAME }}:dev
