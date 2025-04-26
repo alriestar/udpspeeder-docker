@@ -1,6 +1,6 @@
 # UDPSpeeder on docker
 
-This just another docker build udpspeeder use wolfi as base image
+This just another docker build UDPSpeeder use wolfi as base image
 
 thanks to:
 
