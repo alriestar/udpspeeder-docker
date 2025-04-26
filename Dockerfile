@@ -14,7 +14,6 @@ RUN cd /usr/bin \
        arm64) echo "arm" ;; \
        arm) echo "arm" ;; \
        386) echo "x86" ;; \
-       *) echo "unknown" ;; esac) \
     && mv speederv2_$SUFFIX udp-speeder \
     && chmod +x udp-speeder \
     && rm -f speederv2_* \
