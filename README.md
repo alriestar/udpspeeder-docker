@@ -12,7 +12,7 @@ and other
 
 Primarily uses Docker Compose but can also use Docker run 
 
-Help
+### Help
 
 ```bash
 $ docker run --rm  ghcr.io/alriestar/udpspeeder --help
@@ -68,7 +68,7 @@ log and help options:
 
 ```
 
-Running with the docker run command
+### Running with the docker run command
 
 ```bash
 docker run --name server --network host --restart unless-stopped -d ghcr.io/alriestar/udpspeeder:latest \
@@ -77,7 +77,7 @@ docker run --name server --network host --restart unless-stopped -d ghcr.io/alri
 
 In my case, I am using it with WireGuard for testing purposes only
 
-For Docker Compose
+### For Docker Compose
 
 ```bash
 services:
